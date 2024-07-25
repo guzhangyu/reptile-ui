@@ -13,10 +13,10 @@
   <div class="login">
     <el-form class="form" :model="model" :rules="rules" ref="loginForm">
       <h1 class="title">Vue3 Element Admin</h1>
-      <el-form-item prop="userName">
+      <el-form-item prop="username">
         <el-input
           class="text"
-          v-model="model.userName"
+          v-model="model.username"
           prefix-icon="User"
           clearable
           :placeholder="$t('login.username')"
@@ -78,7 +78,7 @@ export default defineComponent({
       state.rules = getRules()
     })
     const getRules = () => ({
-      userName: [
+      username: [
         {
           required: true,
           message: ctx.$t('login.rules-username'),
@@ -101,7 +101,7 @@ export default defineComponent({
     })
     const state = reactive({
       model: {
-        userName: 'admin',
+        username: 'admin',
         password: '123456',
       },
       rules: getRules(),
