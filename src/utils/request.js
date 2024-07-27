@@ -1,36 +1,5 @@
-/*
- *                        .::::.
- *                      .::::::::.
- *                     :::::::::::
- *                  ..:::::::::::'
- *               '::::::::::::'
- *                 .::::::::::
- *            '::::::::::::::..
- *                 ..::::::::::::.
- *               ``::::::::::::::::
- *                ::::``:::::::::'        .:::.
- *               ::::'   ':::::'       .::::::::.
- *             .::::'      ::::     .:::::::'::::.
- *            .:::'       :::::  .:::::::::' ':::::.
- *           .::'        :::::.:::::::::'      ':::::.
- *          .::'         ::::::::::::::'         ``::::.
- *      ...:::           ::::::::::::'              ``::.
- *     ````':.          ':::::::::'                  ::::..
- *                        '.:::::'                    ':'````..
- *
- * @Descripttion:
- * @version:
- * @Date: 2021-04-20 11:06:21
- * @LastEditors: huzhushan@126.com
- * @LastEditTime: 2022-09-27 18:17:20
- * @Author: huzhushan@126.com
- * @HomePage: https://huzhushan.gitee.io/vue3-element-admin
- * @Github: https://github.com/huzhushan/vue3-element-admin
- * @Donate: https://huzhushan.gitee.io/vue3-element-admin/donate/
- */
-
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import router from '@/router'
 import { useApp } from '@/pinia/modules/app'
 
@@ -56,10 +25,50 @@ service.interceptors.request.use(
 )
 
 // 拦截响应
+// 拦截响应
 service.interceptors.response.use(
   // 响应成功进入第1个函数，该函数的参数是响应对象
   response => {
-    return response.data
+    const res = response.data
+
+    // if the custom code is not 20000, it is judged as an error.
+    if (res.code !== 200) {
+	  if(res.code == 1003) {
+		  ElMessage({
+		    message: '权限不足',
+		    type: 'error',
+		    duration: 5 * 1000,
+		  })
+		  router.back()
+	  } else if (
+        res.code === 7777 ||
+        (res.message && res.message.indexOf('This subject is anonymous') >= 0)
+      ) {
+        // to re-login
+        ElMessageBox.confirm(
+          '登录超时，请重新登录，点击取消将停留在本页面',
+          '确认退出',
+          {
+            confirmButtonText: '重新登录',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+        ).then(() => {
+          const { clearToken } = useApp()
+          clearToken()
+          location.reload()
+        })
+      } else {
+        ElMessage({
+          message: res.message || 'Error',
+          type: 'error',
+          duration: 5 * 1000,
+        })
+      }
+      return Promise.reject(new Error(res.message || 'Error'))
+    } else {
+      return res
+    }
   },
   // 响应失败进入第2个函数，该函数的参数是错误对象
   async error => {
