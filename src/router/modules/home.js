@@ -51,23 +51,23 @@ export default [
           title: '网站',
         },
       },
-	  {
-	    path: 'itemRegexp/:id',
-	    name: 'itemRegexp',
-	    component: () => import('@/views/item_website/regexp.vue'),
-	    meta: {
-	      title: '商品匹配正则',
-	    },
-		hidden: true
-	  },
-	  {
-	    path: '',
-	    name: 'item',
-	    component: () => import('@/views/item/index.vue'),
-	    meta: {
-	      title: '商品',
-	    },
-	  },
+      {
+        path: 'itemRegexp/:id',
+        name: 'itemRegexp',
+        component: () => import('@/views/item_website/regexp.vue'),
+        meta: {
+          title: '商品匹配正则',
+        },
+        hidden: true,
+      },
+      {
+        path: '',
+        name: 'item',
+        component: () => import('@/views/item/index.vue'),
+        meta: {
+          title: '商品',
+        },
+      },
     ],
   },
 ]

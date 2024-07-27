@@ -33,14 +33,14 @@ service.interceptors.response.use(
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
-	  if(res.code == 1003) {
-		  ElMessage({
-		    message: '权限不足',
-		    type: 'error',
-		    duration: 5 * 1000,
-		  })
-		  router.back()
-	  } else if (
+      if (res.code == 1003) {
+        ElMessage({
+          message: '权限不足',
+          type: 'error',
+          duration: 5 * 1000,
+        })
+        router.back()
+      } else if (
         res.code === 7777 ||
         (res.message && res.message.indexOf('This subject is anonymous') >= 0)
       ) {
